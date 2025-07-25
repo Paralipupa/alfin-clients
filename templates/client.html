@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиент: {{ client['fio'] }}</title>
+</head>
+<body>
+    <h1>Клиент: {{ client['fio'] }}</h1>
+    <h2>Данные клиента</h2>
+    <ul>
+        {# Используем loop.index для нумерации #}
+        {% for field in client['data'] %}
+            <li>Поле {{ loop.index }}: {{ field }}</li>
+        {% endfor %}
+    </ul>
+    <h2>История кредитов</h2>
+    {% if history %}
+        <ul>
+        {% for record in history %}
+            <li>
+                <ul>
+                {% for key, value in record.items() %}
+                    <li>{{ key }}: {{ value }}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>История кредитов не найдена.</p>
+    {% endif %}
+    <a href="/">Назад к поиску</a>
+</body>
+</html> 

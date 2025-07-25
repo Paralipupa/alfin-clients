@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+</head>
+<body>
+    <h1>Поиск клиентов</h1>
+    <form method="get" action="/">
+        <input type="hidden" name="letter" value="{{ selected_letter }}">
+        <input type="text" name="q" placeholder="ФИО или ID" value="{{ query }}">
+        <button type="submit">Поиск</button>
+    </form>
+    <div>
+        <b>Фильтр по первой букве фамилии:</b>
+        {% for letter in letters %}
+            {% if letter == selected_letter %}
+                <b>[{{ letter }}]</b>
+            {% else %}
+                <a href="?letter={{ letter }}">{{ letter }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if selected_letter %}
+            <a href="/">Сбросить</a>
+        {% endif %}
+    </div>
+    {% if clients %}
+        <h2>Результаты поиска:</h2>
+        <ul>
+        {% for client in clients %}
+            <li>
+                <a href="{{ url_for('client_detail', client_id=client['id']) }}">{{ client['fio'] }}</a>
+                (ID: {{ client['id'] }})
+            </li>
+        {% endfor %}
+        </ul>
+        {# Пагинация #}
+        <div>
+            {% if page > 1 %}
+                <a href="?q={{ query }}&letter={{ selected_letter }}&page={{ page-1 }}">&lt; Предыдущая</a>
+            {% endif %}
+            Страница {{ page }} из {{ total_pages }}
+            {% if page < total_pages %}
+                <a href="?q={{ query }}&letter={{ selected_letter }}&page={{ page+1 }}">Следующая &gt;</a>
+            {% endif %}
+        </div>
+    {% elif query or selected_letter %}
+        <p>Клиенты не найдены.</p>
+    {% endif %}
+</body>
+</html> 

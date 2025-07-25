@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  clients-app:
+    build: .
+    container_name: clients-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    restart: unless-stopped 
+
+networks:
+  default:
+    name: nginx-proxy
+    external: true
